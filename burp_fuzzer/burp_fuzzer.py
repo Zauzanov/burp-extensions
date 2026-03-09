@@ -30,4 +30,10 @@ class BurpFuzzer(IIntruderPayloadGenerator):
         
         return 
     
+    def hasMorePayloads(self):
+        if self.num_iterations == self.max_payloads:
+            return False
+        else: 
+            return True
+    
     
