@@ -19,4 +19,15 @@ class BurpExtender(IBurpExtender, IIntruderPayloadGeneratorFactory):
     
     def createNewInstance(self, attack):
         return BurpFuzzer(self, attack)
+
+class BurpFuzzer(IIntruderPayloadGenerator):
+    def __int__(self, extender, attack):
+        self._extender = extender
+        self._helpers = extender._helpers
+        self._attack = attack
+        self.max_payloads = 10
+        self.num_iterations = 0
+        
+        return 
+    
     
