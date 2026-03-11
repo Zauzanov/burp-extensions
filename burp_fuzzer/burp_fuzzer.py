@@ -35,5 +35,17 @@ class BurpFuzzer(IIntruderPayloadGenerator):
             return False
         else: 
             return True
+        
+    def getNextPayload(self, current_payload):
+        # Convert to a string
+        payload = "".join(chr(x) for x in current_payload)
+
+        # Call our simple method to modify the POST request
+        payload = self.mutate_payload(payload)
+
+        # Increment the number of attempts
+        self.num_iterations += 1
+
+        return payload
     
     
