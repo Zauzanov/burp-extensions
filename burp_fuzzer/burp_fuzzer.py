@@ -20,6 +20,7 @@ class BurpExtender(IBurpExtender, IIntruderPayloadGeneratorFactory):
     def createNewInstance(self, attack):
         return BurpFuzzer(self, attack)
 
+
 class BurpFuzzer(IIntruderPayloadGenerator):
     def __int__(self, extender, attack):
         self._extender = extender
@@ -51,3 +52,29 @@ class BurpFuzzer(IIntruderPayloadGenerator):
     def reset(self):
         self.num_iterations = 0
         return
+
+    def mutate_payload(self, original_payload):
+        # Choose a simple fuzzing method(we can even call an external script)
+        picker = random.randint(1, 3)
+
+        # Choose a random offset in modified payload
+        offset = random.randint(0, len(original_payload)-1)
+
+        front, back = original_payload[:offset], original_payload[offset:]
+
+        # Trying to inject SQL code with a random offset
+        if picker == 1:
+            front += "'"
+        
+        # In addition to this, we are attempting an XSS-attack
+        elif picker ==2:
+            front += "<script>alert('BooM!BOOM!BAM!');</script>"
+        
+        # Duplicate a random fragment of the original payload
+        elif picker == 3:
+            chunk_length = random.randint(0, len(back)-1)
+            repeater = random.randint(1, 10)
+            for _ in range(repeater):
+                front += original_payload[:offset + chunk_length]
+        
+        return front + back
