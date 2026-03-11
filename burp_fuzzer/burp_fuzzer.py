@@ -15,14 +15,14 @@ class BurpExtender(IBurpExtender, IIntruderPayloadGeneratorFactory):
         return
     
     def getGeneratorName(self):
-        return "Payload Generator"
+        return "BOOM Payload Generator"
     
     def createNewInstance(self, attack):
         return BurpFuzzer(self, attack)
 
 
 class BurpFuzzer(IIntruderPayloadGenerator):
-    def __int__(self, extender, attack):
+    def __init__(self, extender, attack):
         self._extender = extender
         self._helpers = extender._helpers
         self._attack = attack
