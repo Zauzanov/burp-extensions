@@ -48,4 +48,6 @@ class BurpFuzzer(IIntruderPayloadGenerator):
 
         return payload
     
-    
+    def reset(self):
+        self.num_iterations = 0
+        return
