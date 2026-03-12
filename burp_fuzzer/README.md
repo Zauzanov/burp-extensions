@@ -75,10 +75,10 @@ That means:
 - DVWA is receiving them;
 - the parameter is likely injectable.
 
-Conclusion: the script works!.
+Conclusion: the script works!
 
 ### 4. The only nuance is this:
-- it proves your payload generator and Intruder workflow work;
+- it proves our payload generator and Intruder workflow work;
 - it does not automatically mean every payload is useful;
 - it does suggest the target parameter is behaving like a SQL injection point.
 
