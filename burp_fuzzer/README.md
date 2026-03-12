@@ -1,4 +1,5 @@
 # burp-fuzzer
+Custom Burp Suite Intruder extension for generating payloads used in web security testing, fuzzing, and pentesting experiments.
 
 ## PREPARATIONS
 ### 1. Download Jython standalone: 
