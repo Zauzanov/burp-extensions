@@ -9,7 +9,7 @@ Custom Burp Suite Intruder extension for generating payloads used in web securit
     - duplicating chunks to fuzz input handling.
 
 So you can customize this fuzzing payload generator as you want to mutate the initial payload, randomizing it with SQLi, XSS and so on. <br>
- **Use only on hosts/networks you own or have permission to test.**
+ **⚠️Use only on hosts/networks you own or have permission to test.**
 
 ## PREPARATIONS
 ### 1. Download Jython standalone: 
