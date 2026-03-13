@@ -18,6 +18,8 @@ https://www.jython.org/download
 https://repo1.maven.org/maven2/org/python/jython-standalone/2.7.4/jython-standalone-2.7.4.jar
 ```
 
+`Jython` is an implementation of the Python programming language that runs on the `Java Virtual Machine (JVM)`. It allows us to write Python code that can seamlessly interact with existing Java classes, libraries, and frameworks. Jython supports Python 2. 
+
 ### 2. Link JAR-file to Burp: 
 **Tabs**:<br> 
 `Burp`  — `Settings` — `Extensions` — `Core extension settings` — `Python environment` — `Location of Jython standalone JAR file`: 
