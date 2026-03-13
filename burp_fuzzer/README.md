@@ -42,7 +42,6 @@ Reset databases.
 ![Send Request](Screenshots/03%20-%20Send%20Request.png)
 
 ### 2. Intercept it using Burp Proxy+FoxyProxy, then send it to Burp Intruder: 
-IMG 04 - Intercept
 ![Intercept](Screenshots/04%20-%20Intercept.png)
 
 ### 3. Set the settings like the following, adding positions and choosing `Payload type: Extension-generated` and selecting `BOOM Payload Generator` (`burp_fuzzer.py`) as a generator:
