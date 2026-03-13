@@ -1,4 +1,4 @@
-# burp-fuzzer – Burp Suite Intruder payload generator.
+# burp-fuzzer – Burp Suite Intruder payload generator
 Custom Burp Suite Intruder extension for generating payloads used in web security testing, fuzzing, and pentesting experiments:
 - Burp Intruder needs payloads to send into a request parameter;
 - This extension tells Burp how to generate those payloads;
@@ -8,7 +8,8 @@ Custom Burp Suite Intruder extension for generating payloads used in web securit
     - injecting a `<script>` for XSS testing;
     - duplicating chunks to fuzz input handling.
 
-So you can customize this fuzzing payload generator as you want to mutate the initial payload, randomizing it with SQLi, XSS and so on. **Use only on hosts/networks you own or have permission to test.**
+So you can customize this fuzzing payload generator as you want to mutate the initial payload, randomizing it with SQLi, XSS and so on. <br>
+ **Use only on hosts/networks you own or have permission to test.**
 
 ## PREPARATIONS
 ### 1. Download Jython standalone: 
