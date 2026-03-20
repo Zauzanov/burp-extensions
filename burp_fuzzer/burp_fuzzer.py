@@ -7,19 +7,22 @@ from java.util import List, ArrayList                                           
 import random                                                                                   # To give our fuzzing a randomized nature. 
 
 
-class BurpExtender(IBurpExtender, IIntruderPayloadGeneratorFactory):
-    def registerExtenderCallbacks(self, callbacks):
-        self._callbacks = callbacks
-        self._helpers = callbacks.getHelpers()
+# Burp looks for a class named BurpExtender that implements IBurpExtender.
+class BurpExtender(IBurpExtender, IIntruderPayloadGeneratorFactory):                            # This class implements two Burp interfaces: The first as an entry point for the extension; The second as a factory that creates Intruder payload generators.
+    def registerExtenderCallbacks(self, callbacks):                                             # Extension registration; `callbacks` - Burp's API object, gives our extension access to Burp functionality.
+        self._callbacks = callbacks                                                             # Store the callbacks object inside the class so we can use it later; Underscores stands for internal use.
+        self._helpers = callbacks.getHelpers()                                                  # Burp's helpers object containing utility methods: converting bytes to strings; analyzing HTTP reqs/resps and so on. 
 
-        callbacks.registerIntruderPayloadGeneratorFactory(self)
+        callbacks.registerIntruderPayloadGeneratorFactory(self)                                 # Registers this extension as a payload generator factory for Intruder.  
         return
     
+    # Generator display name. 
     def getGeneratorName(self):
-        return "BOOM Payload Generator"
+        return "BOOM Payload Generator"                                                         # Burp uses this method to dispay our generator's name in the Intruder UI.
     
-    def createNewInstance(self, attack):
-        return BurpFuzzer(self, attack)
+    # Creating a generator instance.
+    def createNewInstance(self, attack):                                                        # Burp calls this method, when Intruder starts an attack and uses this extension. 
+        return BurpFuzzer(self, attack)                                                         # Creates and returns a new payload generator object. Each attack gets its own state: own counter, own settings and own execution context. 
 
 
 class BurpFuzzer(IIntruderPayloadGenerator):
