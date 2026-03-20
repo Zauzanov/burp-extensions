@@ -1,10 +1,11 @@
-from burp import IBurpExtender
-from burp import IIntruderPayloadGeneratorFactory
-from burp import IIntruderPayloadGenerator
+from burp import IBurpExtender                                                                  # The entry point for every Burp extension. 
+from burp import IIntruderPayloadGeneratorFactory                                               #  A payload generator provider to create a generator object. 
+from burp import IIntruderPayloadGenerator                                                      # The actual payload generator. 
 
-from java.util import List, ArrayList
+from java.util import List, ArrayList                                                           # Imports Java classes into this Jython script.
 
-import random
+import random                                                                                   # To give our fuzzing a randomized nature. 
+
 
 class BurpExtender(IBurpExtender, IIntruderPayloadGeneratorFactory):
     def registerExtenderCallbacks(self, callbacks):
