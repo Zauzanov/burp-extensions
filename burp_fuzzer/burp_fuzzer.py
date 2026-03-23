@@ -25,13 +25,16 @@ class BurpExtender(IBurpExtender, IIntruderPayloadGeneratorFactory):            
         return BurpFuzzer(self, attack)                                                         # Creates and returns a new payload generator object. Each attack gets its own state: own counter, own settings and own execution context. 
 
 
+# This class generates payloads. 
+# It implements IIntruderPayloadGenerator, 
+# as Burp expects it to provide the following methods.
 class BurpFuzzer(IIntruderPayloadGenerator):
-    def __init__(self, extender, attack):
-        self._extender = extender
-        self._helpers = extender._helpers
-        self._attack = attack
-        self.max_payloads = 10
-        self.num_iterations = 0
+    def __init__(self, extender, attack):                                                       # This is the constructor. It runs when we do: BurpFuzzer(self, attack).
+        self._extender = extender                                                               # We store a reference to the main extension object. That gives our generator access to anything stored there. 
+        self._helpers = extender._helpers                                                       # Copies Burp helpers from th main extension into this generator. 
+        self._attack = attack                                                                   # Stores the Intruder attack context: could be useful for attack-specific behavior.
+        self.max_payloads = 10                                                                  # Sets a hard limit: the generator will produce 10 payloads total. 
+        self.num_iterations = 0                                                                 # Initializes a counter tracking how many payloads have already been generated. 
         
         return 
     
