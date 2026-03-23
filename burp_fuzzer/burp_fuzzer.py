@@ -64,8 +64,11 @@ class BurpFuzzer(IIntruderPayloadGenerator):
         # Returns the mutated payload to Burp.
         return payload                                                                          # Then Burp will use it as the injected payload in the request.
     
+    # Burp call this method if it wants 
+    # to reset the payload generator, 
+    # making it reusable. 
     def reset(self):
-        self.num_iterations = 0
+        self.num_iterations = 0                                                                 # Reset the internal counter so the generator can produce payloads again. 
         return
 
     def mutate_payload(self, original_payload):
