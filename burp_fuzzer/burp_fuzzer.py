@@ -44,18 +44,25 @@ class BurpFuzzer(IIntruderPayloadGenerator):
             return False                                                                        # We use a Boolean here, as this method itself is supposed to answer a yes/no question. 
         else: 
             return True
-        
-    def getNextPayload(self, current_payload):
-        # Convert to a string
-        payload = "".join(chr(x) for x in current_payload)
 
-        # Call our simple method to modify the POST request
+    # Takes the original content of the HTTP request.
+    # Burp calls this each time it wants the next payload value.     
+    def getNextPayload(self, current_payload): 
+        # Converts the incoming byte array 
+        # into a python string we can manipulate. 
+        payload = "".join(chr(x) for x in current_payload)                                      # Loops through each byte value; 
+                                                                                                # Converts each integer bytre into a character; 
+                                                                                                # Join all characters together into 1 string.
+
+        # Modify th current Intruder paylaod value,
+        # passing it into our custom mutation function.
         payload = self.mutate_payload(payload)
 
         # Increment the number of attempts
-        self.num_iterations += 1
+        self.num_iterations += 1                                                                # So the generator remembers how many payload it has already produced. 
 
-        return payload
+        # Returns the mutated payload to Burp.
+        return payload                                                                          # Then Burp will use it as the injected payload in the request.
     
     def reset(self):
         self.num_iterations = 0
