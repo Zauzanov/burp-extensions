@@ -38,9 +38,10 @@ class BurpFuzzer(IIntruderPayloadGenerator):
         
         return 
     
+    # Checks whether we've reached the max number of fuzzing iterations.
     def hasMorePayloads(self):
         if self.num_iterations == self.max_payloads:
-            return False
+            return False                                                                        # We use a Boolean here, as this method itself is supposed to answer a yes/no question. 
         else: 
             return True
         
