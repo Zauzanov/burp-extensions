@@ -71,28 +71,36 @@ class BurpFuzzer(IIntruderPayloadGenerator):
         self.num_iterations = 0                                                                 # Reset the internal counter so the generator can produce payloads again. 
         return
 
-    def mutate_payload(self, original_payload):
-        # Choose a simple fuzzing method(we can even call an external script)
-        picker = random.randint(1, 3)
+    # Payload mutation function:
+    # splits its contents into 2 blocks(front/back);
+    # randomly selects 1 of 3 fuzzing methods.
+    def mutate_payload(self, original_payload):                                                 # It takes the original payload as input and returns a modified version. 
+        # Choose a simple fuzzing method
+        # (we can even call an external script)
+        picker = random.randint(1, 3)                                                           # Randomly chooses 1 of 3 mutation strategies.
 
         # Choose a random offset in modified payload
         offset = random.randint(0, len(original_payload)-1)
 
-        front, back = original_payload[:offset], original_payload[offset:]
+        front, back = original_payload[:offset], original_payload[offset:]                      # Splits the payload into 2 parts. 
 
-        # Trying to inject SQL code with a random offset
+        # Mutation strategy 1 — quote injection:
+        # trying to inject SQL code with a random offset.
         if picker == 1:
             front += "'"
         
-        # In addition to this, we are attempting an XSS-attack
+        # Mutation strategy 2 — script injection:
+        # we are attempting an XSS-attack.
         elif picker ==2:
             front += "<script>alert('BooM!BOOM!BAM!');</script>"
         
-        # Duplicate a random fragment of the original payload
+        # Mutation strategy 3 — duplication fuzzing: 
+        # duplicates a random fragment of the original payload.
         elif picker == 3:
-            chunk_length = random.randint(0, len(back)-1)
-            repeater = random.randint(1, 10)
+            chunk_length = random.randint(0, len(back)-1)                                       # Choose a random chunk size based on the length of `back`.
+            repeater = random.randint(1, 10)                                                    # Choose how many times to repeat the selected content. 
             for _ in range(repeater):
-                front += original_payload[:offset + chunk_length]
+                front += original_payload[:offset + chunk_length]                               # Appends a prefix of the original payload repeatedly. 
         
+        # Rebuilds the mutated payload
         return front + back
