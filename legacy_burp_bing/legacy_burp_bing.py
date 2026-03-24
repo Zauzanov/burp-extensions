@@ -69,3 +69,19 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         http_request += 'Connection: close\r\n'
         http_request += 'Ocp-Apim-Subscription-Key: %s\r\n' % API_KEY                                   # HTTP request header used to secure access to APIs published through Azure API Management.
         http_request += 'User-Agent: MSIE 4.0 (Win95)\r\n\r\n'
+
+        json_body = self._callbacks.makeHttpRequest(API_HOST, 443, True, http_request).tostring()
+        json_body = json_body.split('\r\n\r\n', 1)[1]
+
+        try:
+            response = json.loads(json_body)
+        except (TypeError, ValueError) as err:
+            print('No results from Bing: %s' % err)
+        else:
+            sites = list()
+            if response.get('webPages'):
+                sites = response['webPages']['value']
+            if len(sites):
+                for site in sites:
+                    print('*'*100)
+                    print('Name: %s             ' % site['name'])
