@@ -93,5 +93,5 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
                     if not self._callbacks.isInScope(java_url):
                         print('Adding %s to Burp scope' % site['url'])
                         self._callbacks.includeInScope(java_url)
-                    else:
-                        print('Empty response from Bing: %s' % bing_query_string)
+            else:
+                print('Empty response from Bing: %s' % bing_query_string)
