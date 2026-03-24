@@ -41,3 +41,21 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
             print("User selected host: %s" % host)
             self.bing_search(host)
         return
+
+    def bing_search(self, host):
+        # Check what we've been given: IP or domain
+        try:
+            is_ip = bool(socket.inet_aton(host))
+        except socket.error:
+            is_ip = False
+        if is_ip:
+            ip_address = host
+            domain = False
+        else:
+            ip_address = socket.gethostbyname(host)
+            domain = True
+
+        start_new_thread(self.bing_query, ('ip:%s' % ip_address,))
+
+        if domain:
+            start_new_thread(self.bing_query, ('domain:%s' % host,))
