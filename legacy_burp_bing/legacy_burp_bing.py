@@ -59,3 +59,10 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
 
         if domain:
             start_new_thread(self.bing_query, ('domain:%s' % host,))
+    
+    def bing_query(self, bing_query_string):
+        print("Performing Bing search: %s" % bing_query_string)
+        http_request = 'GET https://%s/bing/v.7.0/search?' % API_HOST
+        # We format our request
+        http_request += 'q=%s HTTP/1.1\r\n' % urllib.quote(bing_query_string)
+        
