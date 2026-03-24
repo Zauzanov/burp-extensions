@@ -23,4 +23,9 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         callbacks.registerContextMenuFactory(self)
 
         return
-
+    
+    def createMenuItems(self, context_menu):
+        self.context = context_menu
+        menu_list = ArrayList()
+        menu_list.add(JMenuItem("Send to Bing", actionPerformed=self.bing_menu))
+        return menu_list
