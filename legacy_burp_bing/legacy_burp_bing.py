@@ -12,3 +12,15 @@ import urllib
 API_KEY = "YOUR_KEY"
 API_HOST = "api.cognitive.microsoft.com"
 
+class BurpExtender(IBurpExtender, IContextMenuFactory):
+    def registerExtenderCallbacks(self, callbacks):
+        self._callbacks = callbacks
+        self._helpers = callbacks.getHelpers()
+        self.context = None
+
+        # Preparing our extension
+        callbacks.setExtensionName("Dead-Bing")
+        callbacks.registerContextMenuFactory(self)
+
+        return
+
