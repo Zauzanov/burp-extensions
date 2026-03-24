@@ -65,4 +65,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         http_request = 'GET https://%s/bing/v.7.0/search?' % API_HOST
         # We format our request
         http_request += 'q=%s HTTP/1.1\r\n' % urllib.quote(bing_query_string)
-        
+        http_request += 'Host: %s\r\n' % API_HOST
+        http_request += 'Connection: close\r\n'
+        http_request += 'Ocp-Apim-Subscription-Key: %s\r\n' % API_KEY                                   # HTTP request header used to secure access to APIs published through Azure API Management.
+        http_request += 'User-Agent: MSIE 4.0 (Win95)\r\n\r\n'
