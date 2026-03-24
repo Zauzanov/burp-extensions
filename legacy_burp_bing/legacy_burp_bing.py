@@ -62,7 +62,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
     
     def bing_query(self, bing_query_string):
         print("Performing Bing search: %s" % bing_query_string)
-        http_request = 'GET https://%s/bing/v.7.0/search?' % API_HOST
+        http_request = 'GET https://%s/bing/v7.0/search?' % API_HOST
         # We format our request
         http_request += 'q=%s HTTP/1.1\r\n' % urllib.quote(bing_query_string)
         http_request += 'Host: %s\r\n' % API_HOST
@@ -76,7 +76,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         try:
             response = json.loads(json_body)
         except (TypeError, ValueError) as err:
-            print('No results from Bing: %s' % err)
+            print('Failed to parse Bing response:: %s' % err)
         else:
             sites = list()
             if response.get('webPages'):
