@@ -21,7 +21,6 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         # Preparing our extension
         callbacks.setExtensionName("Dead-Bing")
         callbacks.registerContextMenuFactory(self)
-
         return
     
     def createMenuItems(self, context_menu):
@@ -29,3 +28,16 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         menu_list = ArrayList()
         menu_list.add(JMenuItem("Send to Bing", actionPerformed=self.bing_menu))
         return menu_list
+    
+    def bing_menu(self, event):
+        # Retrieve details about what the user clicked on
+        http_traffic = self.context.getSelectedMessages()
+
+        print("%d requests highlighted" % len(http_traffic))
+
+        for traffic in http_traffic:
+            http_service = traffic.getHttpService()
+            host = http_service.getHost()
+            print("User selected host: %s" % host)
+            self.bing_search(host)
+        return
