@@ -1,14 +1,17 @@
-from burp import IBurpExtender
-from burp import IContextMenuFactory
+# Burp Extender API interfaces
+from burp import IBurpExtender                                              # Neccessary for creating custom extensions, w/o it Burp wouldnt know to load our extension.
+from burp import IContextMenuFactory                                        # Creates right-click context menu items.
 
-from java.net import URL
-from java.util import ArrayList
-from javax.swing import JMenuItem
-from thread import start_new_thread
+from java.net import URL                                                    # Converts a string with URL into Java objects that Burp can understand.
+from java.util import ArrayList                                             # Burp expects Java collections in many places, so this returns the context menu items in a Java-friendly format.
+from javax.swing import JMenuItem                                           # Creates the actual right-click menu entry shown in Burp.
+from thread import start_new_thread                                         # Imports Python 2/Jython low-level threading function in order to run searches in the background. 
+                                                                            # So Burp UI does not freeze while waiting for the urlscan.io API response.
 
-import json
-import socket
-import urllib
+import json                                                                 # For parsing the API response body.
+import socket                                                               # For checking wether a host is an IP and resolving a domain to an IP.
+import urllib                                                               # Used for URL-encoding the query string. Ensures special characters in the search query do not break the GET request. 
+                                                                            # In URLs, characters like these are special: ? & = # % : /. So if we inject them directly into the URL, the server may interpret them as URL syntax instead of data.
 
 API_KEY = "YOUR_URLSCAN_API_KEY"
 API_HOST = "urlscan.io"
