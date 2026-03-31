@@ -21,6 +21,10 @@ SEARCH_PATH = "/api/v1/search/"                                             # Th
 SEARCH_SIZE = 25                                                            # The max number of search results requested from urlscan.io. 
 
 
+
+# Burp extension class, as Burp looks for a class named BurpExtender 
+# implementing IBurpExtender. This Class also implements
+# IContextMenuFactory, so it can create right-click menu items. 
 class BurpExtender(IBurpExtender, IContextMenuFactory):
 
     def registerExtenderCallbacks(self, callbacks):
