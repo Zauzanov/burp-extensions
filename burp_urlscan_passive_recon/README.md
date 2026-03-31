@@ -24,7 +24,7 @@ https://repo1.maven.org/maven2/org/python/jython-standalone/2.7.4/jython-standal
 `Burp` — `Extensions` — `Add` — `Extension type: Python` — `Extension file: burp_urlscan.py` — `Click Next`:
 <br>
 
-![Add Custom Extension](Screenshots/) 
+![Add Custom Extension](Screenshots/02%20-%20Add%20extension.png) 
 
 ### 4. Run DVWA using docker: 
 ```bash
