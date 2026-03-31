@@ -50,7 +50,6 @@ Reset databases.
 
 ### 3. Check the `urlscan` search results:
 ![Results](Screenshots/05%20-%20Results.png)
-![Results](Screenshots/06%20-%20Result.png)
 
 ### 4. Detected hosts automatically added to the Burp Target area:
 ![Results](Screenshots/06%20-%20Target%20scope.png)
