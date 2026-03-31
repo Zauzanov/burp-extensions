@@ -13,10 +13,12 @@ import socket                                                               # Fo
 import urllib                                                               # Used for URL-encoding the query string. Ensures special characters in the search query do not break the GET request. 
                                                                             # In URLs, characters like these are special: ? & = # % : /. So if we inject them directly into the URL, the server may interpret them as URL syntax instead of data.
 
-API_KEY = "YOUR_URLSCAN_API_KEY"
-API_HOST = "urlscan.io"
-SEARCH_PATH = "/api/v1/search/"
-SEARCH_SIZE = 25
+API_KEY = "YOUR_URLSCAN_API_KEY"                                            # Replace it with your own key.
+API_HOST = "urlscan.io"                                                     # Remote API server.
+SEARCH_PATH = "/api/v1/search/"                                             # The search API from docs: https://docs.urlscan.io/apis/urlscan-openapi/search .                                                                         
+                                                                            # Allows users to search for historically website scans, hostnames, domains, TLS certificates and incidents.
+
+SEARCH_SIZE = 25                                                            # The max number of search results requested from urlscan.io. 
 
 
 class BurpExtender(IBurpExtender, IContextMenuFactory):
