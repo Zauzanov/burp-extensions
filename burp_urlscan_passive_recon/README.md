@@ -26,7 +26,7 @@ https://repo1.maven.org/maven2/org/python/jython-standalone/2.7.4/jython-standal
 
 ![Add Custom Extension](Screenshots/02%20-%20Add%20extension.png) 
 
-### 4. Run DVWA using docker: 
+### 4. Run DVWA using docker or use `Demo.testfire.net` — deliberately vulnerable banking web-app, designed by IBM for testing security tools like scanners: 
 ```bash
 docker pull vulnerables/web-dvwa
 docker run -d --name dvwa -p 127.0.0.1:8080:80 vulnerables/web-dvwa
@@ -45,4 +45,14 @@ Reset databases.
 ### 1. Send a request in DVWA:
 ![Send Request](Screenshots/03%20-%20Send%20Request.png)
 
-### 2. Intercept it using Burp Proxy+FoxyProxy, then send it to Burp Intruder: 
+### 2. Intercept it using Burp Proxy+FoxyProxy, then click `Right Click` — `Extension: Send to urlscan.io`: 
+![Intercept](Screenshots/04%20-%20Intercept.png)
+
+### 3. Check the `urlscan` search results:
+![Results](Screenshots/05%20-%20Results.png)
+![Results](Screenshots/06%20-%20Result.png)
+
+### 4. Detected hosts automatically added to the Burp Target area:
+![Results](Screenshots/06%20-%20Target%20scope.png)
+
+IT WORKS! 
