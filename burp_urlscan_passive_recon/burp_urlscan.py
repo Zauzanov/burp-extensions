@@ -28,12 +28,12 @@ SEARCH_SIZE = 25                                                            # Th
 class BurpExtender(IBurpExtender, IContextMenuFactory):
 
     def registerExtenderCallbacks(self, callbacks):
-        self._callbacks = callbacks
-        self._helpers = callbacks.getHelpers()
-        self.context = None
+        self._callbacks = callbacks                                         # Lets other method access Burp functions.
+        self._helpers = callbacks.getHelpers()                              # Burp helpers can do: analyze req/resps; build reqs; decode/encode data.
+        self.context = None                                                 # Creates an instance variable to store the current right-click context. 
 
-        callbacks.setExtensionName("Send to urlscan.io")
-        callbacks.registerContextMenuFactory(self)
+        callbacks.setExtensionName("Send to urlscan.io")                    # Sets the extension name as shown in Burp's Extensions tab.                   
+        callbacks.registerContextMenuFactory(self)                          # Registers this class as a provider of context menu items.
         print("urlscan.io extension loaded")
         return
 
