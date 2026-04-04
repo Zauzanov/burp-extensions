@@ -65,22 +65,25 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
 
         return
 
+    # Host processing and deciding what to search:
+    # this method decides how to search urlcan
+    # based no whether the host is IP or domain name.
     def urlscan_search(self, host):
         # Check whether host is an IP or a domain
-        try:
-            is_ip = bool(socket.inet_aton(host))
-        except socket.error:
+        try:                                                                # It tries to interpret `host` as an IPv4 address.
+            is_ip = bool(socket.inet_aton(host))                            # `socket.inet_aton` succeeds if `host` is a valid IPv4 address. `bool(...)` converts the result into True/False.
+        except socket.error:                                                # It throws `socket.error` if not. For example: "8.8.8.8" - valid IP; "example.com" - error.
             is_ip = False
-
+        
         if is_ip:
-            ip_address = host
-            domain = False
+            ip_address = host                                               # If the selected host is already an IP, store it in here. 
+            domain = False                                                  # mark `domain` as False.
         else:
-            domain = True
-            try:
-                ip_address = socket.gethostbyname(host)
+            domain = True                                                   # If not an IP, assume it is a domain name.
+            try:                                                            # If it's a domain: try DNS resolution using `socket.gethostbyname`.
+                ip_address = socket.gethostbyname(host)                     # If resoluiton succeeds, store its IPv4 address.
             except socket.error as err:
-                ip_address = None
+                ip_address = None                                           # If resolution fails, set this, as our extension wants to search urlscan both by resolved IP and domain name.
                 print("Could not resolve %s: %s" % (host, err))
 
         # Search by IP when possible
