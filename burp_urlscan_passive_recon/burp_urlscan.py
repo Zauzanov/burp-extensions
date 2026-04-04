@@ -41,13 +41,14 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
     def createMenuItems(self, context_menu):
         self.context = context_menu
         menu_list = ArrayList()                                             # Create a Java ArrayList to hold menu items.
-        menu_list.add(JMenuItem("Send to urlscan.io", actionPerformed=self.urlscan_menu)) # Creates a menu item labeled 'Send to...'.
+        menu_list.add(JMenuItem("Send to urlscan.io", 
+                                actionPerformed=self.urlscan_menu))         # Creates a menu item labeled 'Send to...'.
         return menu_list                                                    # Returns the list of menu items to Burp. That's how the custom menu entry appears.
 
     # Menu click handler.
     # This method runs when the user clicks our custom menu item.
     def urlscan_menu(self, event):
-        http_traffic = self.context.getSelectedMessages()
+        http_traffic = self.context.getSelectedMessages()                   # Asks the stored Burp context for the selected HTTP messages. This returns the selected reqs/resps the user highlighted in Burp.
 
         if not http_traffic:
             print("No requests highlighted")
@@ -55,11 +56,12 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
 
         print("%d requests highlighted" % len(http_traffic))
 
+        # Loops throuh each selected HTTP message
         for traffic in http_traffic:
-            http_service = traffic.getHttpService()
-            host = http_service.getHost()
+            http_service = traffic.getHttpService()                         # Gets the associated HTTP service for that message. This gives access to: host; port; protocol.
+            host = http_service.getHost()                                   # Extracts the host from the selected message.
             print("User selected host: %s" % host)
-            self.urlscan_search(host)
+            self.urlscan_search(host)                                       # Passes the host into the main search-preparation function. 
 
         return
 
