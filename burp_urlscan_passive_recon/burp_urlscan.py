@@ -37,12 +37,15 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         print("urlscan.io extension loaded")
         return
 
+    # Creating the right-click menu item
     def createMenuItems(self, context_menu):
         self.context = context_menu
-        menu_list = ArrayList()
-        menu_list.add(JMenuItem("Send to urlscan.io", actionPerformed=self.urlscan_menu))
-        return menu_list
+        menu_list = ArrayList()                                             # Create a Java ArrayList to hold menu items.
+        menu_list.add(JMenuItem("Send to urlscan.io", actionPerformed=self.urlscan_menu)) # Creates a menu item labeled 'Send to...'.
+        return menu_list                                                    # Returns the list of menu items to Burp. That's how the custom menu entry appears.
 
+    # Menu click handler.
+    # This method runs when the user clicks our custom menu item.
     def urlscan_menu(self, event):
         http_traffic = self.context.getSelectedMessages()
 
