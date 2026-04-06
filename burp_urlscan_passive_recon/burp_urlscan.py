@@ -198,12 +198,14 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
                 "Untitled"
             )
 
+            # Pulling more metadata
             site_domain = page.get("domain", "N/A")
             site_ip = page.get("ip", "N/A")
             site_country = page.get("country", "N/A")
             scan_time = task.get("time", "N/A")
             result_api = result.get("result", "N/A")
 
+            # Printing result details
             print("*" * 100)
             print("Title: %s" % site_name)
             print("URL: %s" % site_url)
@@ -214,17 +216,20 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
             print("Result API: %s" % result_api)
             print("*" * 100)
 
+            # Skip empty URLs
             if not site_url:
                 continue
-
+            
+            # Converts URL into Java URL object
             try:
                 java_url = URL(site_url)
             except:
                 print("Skipping invalid URL: %s" % site_url)
                 continue
-
-            if not self._callbacks.isInScope(java_url):
-                print("Adding %s to Burp scope" % site_url)
+            
+            # Adding discovered URLs to Burp scope
+            if not self._callbacks.isInScope(java_url):                                 # Checks whether the discovered URL is already inside Burp's scope.
+                print("Adding %s to Burp scope" % site_url)                             # If not already in scope: log it; add it to Burp scope. 
                 self._callbacks.includeInScope(java_url)
             else:
-                print("%s already in Burp scope" % site_url)
+                print("%s already in Burp scope" % site_url)                            # If already in scope, log that fact and do nothing.
