@@ -117,19 +117,30 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
                                                                                     # Without escaping, crafted or odd host values could: break the query; change search meaning; produce unexpected results. 
         return escaped
 
+    # Makes the API request(urlscan query) and processes the results.
+    # It runs in background threads. 
     def urlscan_query(self, query_string):
-        print("Performing urlscan search: %s" % query_string)
+        print("Performing urlscan search: %s" % query_string)                       # Logs the query being sent.
 
-        params = "q=%s&size=%d" % (urllib.quote(query_string), SEARCH_SIZE)
+        # Builds the URL query string.
+        # (the part after the ? in the URL: 
+        # GET /api/v1/search/?q=page.domain%3Aexample.com&size=25 HTTP/1.1) 
+        # Example: q=page.ip%3A8.8.8.8&size=25.
+        params = "q=%s&size=%d" % (urllib.quote(query_string), 
+                                   SEARCH_SIZE)                                     # URL-encodes reserved characters so they can safely appear inside the HTTP GET query.
 
-        http_request = "GET %s?%s HTTP/1.1\r\n" % (SEARCH_PATH, params)
+        
+        # Building the raw HTTP request.
+        http_request = "GET %s?%s HTTP/1.1\r\n" % (SEARCH_PATH, 
+                                                   params)
         http_request += "Host: %s\r\n" % API_HOST
         http_request += "Connection: close\r\n"
         http_request += "api-key: %s\r\n" % API_KEY
         http_request += "Accept: application/json\r\n"
         http_request += "User-Agent: Burp Suite urlscan.io extension\r\n\r\n"
 
-        response_bytes = self._callbacks.makeHttpRequest(API_HOST, 443, True, http_request)
+        response_bytes = self._callbacks.makeHttpRequest(API_HOST, 
+                                                         443, True, http_request)
         response_text = response_bytes.tostring()
 
         try:
