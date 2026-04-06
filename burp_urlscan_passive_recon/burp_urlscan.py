@@ -106,13 +106,15 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
                                                                                   # It helps to find subdomains, redirects and so on. 
         return
 
+    # Escaping query syntax
     def _escape_query_value(self, value):
         # Minimal escaping for Elasticsearch query-string special chars
         special = ['\\', '+', '-', '=', '&', '|', '>', '<', '!', '(', ')',
                    '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '/']
-        escaped = value
-        for ch in special:
-            escaped = escaped.replace(ch, '\\' + ch)
+        escaped = value                                                             # Starts with the original string, then modifies that copy step by step. 
+        for ch in special:                                                          # Loops over all special characters and prepends a backslash to each. 
+            escaped = escaped.replace(ch, '\\' + ch)                                # example.com/path?x=1 becomes: example.com\/path\?x=1
+                                                                                    # Without escaping, crafted or odd host values could: break the query; change search meaning; produce unexpected results. 
         return escaped
 
     def urlscan_query(self, query_string):
