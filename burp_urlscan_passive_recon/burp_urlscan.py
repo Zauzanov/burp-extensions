@@ -132,17 +132,23 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         
         # Building the raw HTTP request.
         http_request = "GET %s?%s HTTP/1.1\r\n" % (SEARCH_PATH, 
-                                                   params)
-        http_request += "Host: %s\r\n" % API_HOST
-        http_request += "Connection: close\r\n"
-        http_request += "api-key: %s\r\n" % API_KEY
-        http_request += "Accept: application/json\r\n"
-        http_request += "User-Agent: Burp Suite urlscan.io extension\r\n\r\n"
+                                                   params)                          # Builds the request line: GET /api....HTTP/1.1 . 
+        http_request += "Host: %s\r\n" % API_HOST                                   # Adds the Host header. Required for HTTP/1.1.
+        http_request += "Connection: close\r\n"                                     # Tells the server to close the connection after the response. 
+        http_request += "api-key: %s\r\n" % API_KEY                                 # Adds the API key header for auth. 
+                                                                                    # UNSAFE FOR PRODUCTION! — direcrtly injects our API key into the raw HTTP request, 
+                                                                                    # as in this case the key is hardcoded.
+        http_request += "Accept: application/json\r\n"                              # Tells the server we want JSON back. 
+        http_request += "User-Agent: Burp Suite urlscan.io extension\r\n\r\n"       # Adds a UA header and terminates the headers with an empty line. 
 
+        # Sends the request through Burp's API
         response_bytes = self._callbacks.makeHttpRequest(API_HOST, 
-                                                         443, True, http_request)
-        response_text = response_bytes.tostring()
+                                                         443, True, http_request)   # Opens a TLS(True stands for) connections to urlscan.io:443, 
+                                                                                    # sends the request, returns the raw response bytes. 
+        response_text = response_bytes.tostring()                                   # Converts the returned byte array into a string. 
 
+
+        # Separating headers from body: 
         try:
             json_body = response_text.split("\r\n\r\n", 1)[1]
         except IndexError:
