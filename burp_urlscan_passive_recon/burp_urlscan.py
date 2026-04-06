@@ -145,42 +145,52 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         response_bytes = self._callbacks.makeHttpRequest(API_HOST, 
                                                          443, True, http_request)   # Opens a TLS(True stands for) connections to urlscan.io:443, 
                                                                                     # sends the request, returns the raw response bytes. 
+        
         response_text = response_bytes.tostring()                                   # Converts the returned byte array into a string. 
 
 
-        # Separating headers from body: 
-        try:
-            json_body = response_text.split("\r\n\r\n", 1)[1]
+        # Separating headers from body 
+        try:                                                                        # Use try/except: if the resp doesn't contain header/body separator, this avoids crashing. 
+            json_body = response_text.split("\r\n\r\n", 1)[1]                       # The split divides response into: headers & body. Split only once and give me the second piece(HTTP body).
         except IndexError:
             print("Invalid HTTP response from urlscan.io")
             return
 
+        # Parses the response body as JSON
         try:
             response = json.loads(json_body)
         except (TypeError, ValueError) as err:
-            print("Failed to parse urlscan.io response: %s" % err)
+            print("Failed to parse urlscan.io response: %s" % err)                  # If it fails(bad API key;server error), prints the raw body for debugging.
             print("Raw body was: %s" % json_body[:500])
             return
 
-        results = response.get("results", [])
+        # Extracting resuls
+        results = response.get("results", [])                                       # Gets the "results" array from the JSON response. 
+                                                                                    # If it doesn't exist, defaults to an empty list. 
 
         if not results:
-            print("No results from urlscan.io for query: %s" % query_string)
+            print("No results from urlscan.io for query: %s" % query_string)        # If no results were returned, log that and stop. 
             return
 
+        # Logs how many results were found
         print("urlscan.io returned %d results for %s" % (len(results), query_string))
 
-        for result in results:
-            task = result.get("task", {})
-            page = result.get("page", {})
+        for result in results:                                                      # Loops through each scan result returned by urlscan. Each 'result' is a dict-like JSON object. 
+            task = result.get("task", {})                                           # metadata about the scan submission. 
+            page = result.get("page", {})                                           # metadata about the scanned pafe.
+                                                                                    # Defaults to {} if missing, preventing crashes. 
 
+            # Extracting URL and title data:
+            # this tries multiple fallback values to 
+            # find a usable URL. 
             site_url = (
-                page.get("url") or
+                page.get("url") or                                                  # Use `or` as it picks the 1st truthy value. 
                 task.get("url") or
                 result.get("result") or
                 result.get("page", {}).get("url")
             )
 
+            # Builds a display name for the result
             site_name = (
                 page.get("title") or
                 page.get("domain") or
