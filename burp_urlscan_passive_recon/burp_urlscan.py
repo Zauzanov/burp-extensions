@@ -88,15 +88,22 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
 
         # Search by IP when possible
         if ip_address:
-            start_new_thread(self.urlscan_query, ("page.ip:%s" % ip_address,))
+            start_new_thread(self.urlscan_query, 
+                             ("page.ip:%s" % ip_address,))                  # Starts a new background thread that searches urlscan. 
 
         # Search by domain
         if domain:
-            start_new_thread(self.urlscan_query, ("page.domain:%s" % host,))
+            start_new_thread(self.urlscan_query, 
+                             ("page.domain:%s" % host,))                    # Searches urlscan results where the scanned page domain matches the host. 
 
-            # Optional extra search for the apex/domain as submitted task
-            start_new_thread(self.urlscan_query, ("task.url:*%s*" % self._escape_query_value(host),))
-
+            # Optional extra search for the apex/domain as submitted task.
+            # This starts a 3rd possible search for the host inside 
+            # the original submitted task URL.
+            start_new_thread(self.urlscan_query, 
+                             ("task.url:*%s*" % self._escape_query_value(host),)) # Query example: task.url:*example.com*, which means: it looks for scans where the task URL contains the host anywhere.
+                                                                                  # Match anything before example.com and anything after it too.
+                                                                                  # Bc someties the exact page.domain may differ, but the submitted URL still contains the target domain.
+                                                                                  # It helps to find subdomains, redirects and so on. 
         return
 
     def _escape_query_value(self, value):
