@@ -22,4 +22,19 @@ class TagStripper(HTMLParser):
     def strip(self, html):
         self.feed(html)
         return "".join(self.page_text)
+    
+class BurpExtender(IBurpExtender, IContextMenuFactory):
+    def registerExtenderCallbacks(self, callbacks):
+        self._callbacks = callbacks
+        self._helpers = callbacks.getHelpers()
+        self.context = None
+        self.hosts = set()
+
+        # Start with a common password
+        self.wordlist = set(["password"])
+        # Prepare our extension
+        callbacks.setExtensionName("Burp WWG")
+        callbacks.registerContextMenuFactory(self)
+
+        return
 
