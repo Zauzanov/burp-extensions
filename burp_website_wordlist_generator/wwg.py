@@ -79,4 +79,15 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         
         return
     
+    def mangle(self, word):
+        year = datetime.now().year
+        suffixes = ["", "1", "!", year]
+        mangled = []
+
+        for password in (word, word.capitalize()):
+            for suffix in suffixes:
+                mangled.append("%s%s" % (password, suffix))
+        return mangled
+    
+    
     
