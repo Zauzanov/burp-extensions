@@ -2,7 +2,7 @@ from burp import IBurpExtender
 from burp import IContextMenuFactory
 
 from java.util import ArrayList
-from javax.swing import JmenuItem
+from javax.swing import JMenuItem
 
 from datetime import datetime
 from HTMLParser import HTMLParser
@@ -41,13 +41,13 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
     def createMenuItems(self, context_menu):
         self.context = context_menu
         menu_list = ArrayList()
-        menu_list.add(JmenuItem("Create a wordlist", 
+        menu_list.add(JMenuItem("Create a wordlist", 
                                 actionPerformed=self.wordlist_menu))
 
         return menu_list
     
     def wordlist_menu(self, event):
-        # Retrieve detailes what the user clicked on
+        # Retrieve details what the user clicked on
         http_traffic =  self.context.getSelectedMessages()
         for traffic in http_traffic:
             http_service = traffic.getHttpService()
@@ -61,7 +61,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         return
     
     def get_words(self, http_response):
-        header, body = http_response.tostring().split('\r\n\r\n', 1)
+        headers, body = http_response.tostring().split('\r\n\r\n', 1)
 
         # Skip non-textual responses
         if headers.lower().find("content-type: text") == -1: 
@@ -89,5 +89,12 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
                 mangled.append("%s%s" % (password, suffix))
         return mangled
     
-    
+    def display_wordlist(self):
+        print("#!comment: Burp Wordlist for site(s) %s" % ", ".join(self.hosts))
+
+        for word in sorted(self.wordlist):
+            for password in self.mangle(word):
+                print password
+        
+        return
     
