@@ -9,3 +9,9 @@ from HTMLParser import HTMLParser
 
 import re 
 
+class TagStripper(HTMLParser):
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.page_text = []
+    
+    
