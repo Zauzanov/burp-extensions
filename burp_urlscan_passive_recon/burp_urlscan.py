@@ -136,7 +136,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         http_request += "Host: %s\r\n" % API_HOST                                   # Adds the Host header. Required for HTTP/1.1.
         http_request += "Connection: close\r\n"                                     # Tells the server to close the connection after the response. 
         http_request += "api-key: %s\r\n" % API_KEY                                 # Adds the API key header for auth. 
-                                                                                    # UNSAFE FOR PRODUCTION! — direcrtly injects our API key into the raw HTTP request, 
+                                                                                    # UNSAFE FOR PRODUCTION! - direcrtly injects our API key into the raw HTTP request, 
                                                                                     # as in this case the key is hardcoded.
         http_request += "Accept: application/json\r\n"                              # Tells the server we want JSON back. 
         http_request += "User-Agent: Burp Suite urlscan.io extension\r\n\r\n"       # Adds a UA header and terminates the headers with an empty line. 
