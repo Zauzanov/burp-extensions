@@ -17,7 +17,7 @@ class TagStripper(HTMLParser):
     def handle_data(self, data):
         self.page_text.append(data)
     def handle_comment(self, data):
-        self.page_text.appent(data)
+        self.page_text.append(data)
     
     def strip(self, html):
         self.feed(html)
@@ -37,4 +37,11 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         callbacks.registerContextMenuFactory(self)
 
         return
+    
+    def createMenuItems(self, context_menu):
+        self.context = context_menu
+        menu_list = ArrayList()
+        menu_list.add(JmenuItem("Create a wordlist", 
+                                actionPerformed=self.wordlist_menu))
 
+        return menu_list
