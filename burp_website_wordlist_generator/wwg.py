@@ -19,4 +19,7 @@ class TagStripper(HTMLParser):
     def handle_comment(self, data):
         self.page_text.appent(data)
     
-    
+    def strip(self, html):
+        self.feed(html)
+        return "".join(self.page_text)
+
