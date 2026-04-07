@@ -55,3 +55,48 @@ Reset databases.
 ![Results](Screenshots/06%20-%20Target%20scope.png)
 
 IT WORKS! 
+
+---
+
+### 5. ⚠️ If you get the following error when uploading the extension to Burp:
+
+```java
+SyntaxError: Non-ASCII character in file '/home/kali/Desktop/burp/burp_urlscan.py', but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+
+	at org.python.core.Py.SyntaxError(Py.java:169)
+	at org.python.core.ParserFacade.fixParseError(ParserFacade.java:112)
+	at org.python.core.ParserFacade.parse(ParserFacade.java:197)
+	at org.python.core.Py.compile_flags(Py.java:2282)
+	at org.python.core.__builtin__.execfile_flags(__builtin__.java:527)
+	at org.python.util.PythonInterpreter.execfile(PythonInterpreter.java:287)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at burp.Zfh.Zs(Unknown Source)
+	at burp.Zt.Zt(Unknown Source)
+	at burp.Zp7r.ZT(Unknown Source)
+	at burp.Zh6f.lambda$load$2(Unknown Source)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+```
+
+It means your code comments contain a non-ASCII character, like: 
+- an em dash: `—` vs. a normal ASCII hyphen `-`. This one character alone is enough to trigger the error.
+
+#### 5.1 Fix it, adding an encoding declaration: 
+
+Add this as the first line of the file:
+```python
+# -*- coding: utf-8 -*-
+```
+So your file should start like this:
+```python
+# -*- coding: utf-8 -*-
+
+# Burp Extender API interfaces
+from burp import IBurpExtender
+from burp import IContextMenuFactory
+``` 
+It tells Jython that this file is encoded as UTF-8, so Unicode characters in comments are allowed.
