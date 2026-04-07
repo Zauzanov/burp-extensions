@@ -59,3 +59,24 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         
         self.display_wordlist()
         return
+    
+    def get_words(self, http_response):
+        header, body = http_response.tostring().split('\r\n\r\n', 1)
+
+        # Skip non-textual responses
+        if headers.lower().find("content-type: text") == -1: 
+            return
+        
+        tag_stripper = TagStripper()
+        page_text = tag_stripper.strip(body)
+
+        words = re.findall("[a-zA-Z]\w{2,}", page_text)
+
+        for word in words:
+            # filter out long strings
+            if len(word) <= 12:
+                self.wordlist.add(word.lower())
+        
+        return
+    
+    
