@@ -21,7 +21,7 @@ class TagStripper(HTMLParser):
     
     def strip(self, html):
         self.feed(html)
-        return "".join(self.page_text)
+        return " ".join(self.page_text)
     
 class BurpExtender(IBurpExtender, IContextMenuFactory):
     def registerExtenderCallbacks(self, callbacks):
