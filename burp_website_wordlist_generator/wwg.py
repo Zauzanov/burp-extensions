@@ -1,14 +1,18 @@
-from burp import IBurpExtender
-from burp import IContextMenuFactory
+# Burp Extender API interfaces
+from burp import IBurpExtender                                                                              # The main interface Burp expects for an extension.
+from burp import IContextMenuFactory                                                                        # Lets the extension add items to Burp's right-click menu.
 
-from java.util import ArrayList
-from javax.swing import JMenuItem
+# Java classes
+from java.util import ArrayList                                                                             # Burp expects Java-side objects. So we use Java's resizable list type. 
+from javax.swing import JMenuItem                                                                           # Swing GUI component for a menu entry. 
 
-from datetime import datetime
-from HTMLParser import HTMLParser
+# Python libs & classes
+from datetime import datetime                                                                               # To append the current year to password variants. 
+from HTMLParser import HTMLParser                                                                           # Python 2 HTML parses class. 
 
-import re 
+import re                                                                                                   # Python's regular expression module for word extraction. 
 
+# 
 class TagStripper(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
