@@ -53,14 +53,18 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
 
         return
     
-    def createMenuItems(self, context_menu):
-        self.context = context_menu
-        menu_list = ArrayList()
+    # Context menu creation. 
+    def createMenuItems(self, context_menu):                                                                # This context object telling us what was clicked, what messages are selected.
+        self.context = context_menu                                                                         # Store the context so other methods can use it.
+        # To hold menu items
+        menu_list = ArrayList() 
+        # Creates a GUI menu items and adds it to the list
         menu_list.add(JMenuItem("Create a wordlist", 
                                 actionPerformed=self.wordlist_menu))
 
-        return menu_list
+        return menu_list                                                                                    # Returns Java list of menu items to Burp. Burp adds them to the UI.
     
+    # 
     def wordlist_menu(self, event):
         # Retrieve details what the user clicked on
         http_traffic =  self.context.getSelectedMessages()
