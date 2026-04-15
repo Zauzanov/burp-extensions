@@ -64,19 +64,21 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
 
         return menu_list                                                                                    # Returns Java list of menu items to Burp. Burp adds them to the UI.
     
-    # 
+    # Menu click handler
     def wordlist_menu(self, event):
         # Retrieve details what the user clicked on
         http_traffic =  self.context.getSelectedMessages()
+        # Each `traffic` item represents 1 selected HTTP message
         for traffic in http_traffic:
-            http_service = traffic.getHttpService()
-            host = http_service.getHost()
-            self.hosts.add(host)
-            http_response = traffic.getResponse()
+            http_service = traffic.getHttpService()                                                         # Gets connection details: host, port, protocol.
+            host = http_service.getHost()                                                                   # Extracts the hostname from the HTTP service.
+            self.hosts.add(host)                                                                            # Adds the host to the set of hosts. 
+            http_response = traffic.getResponse()                                                           # Gets the raw HTTP response bytes associated with the selected message.
+            # Checks that a response exists, then calls the extraction method.
             if http_response:
                 self.get_words(http_response)
         
-        self.display_wordlist()
+        self.display_wordlist()                                                                             # After all selected responses are processed, prints the final wordlist. 
         return
     
     def get_words(self, http_response):
