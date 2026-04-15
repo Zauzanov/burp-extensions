@@ -37,18 +37,19 @@ class TagStripper(HTMLParser):
         return " ".join(self.page_text)                                                                     # Joins all collected chunks into 1 big string. 
     
 
+# Implements 2 interfaces - for registration and to add rclick menu.
 class BurpExtender(IBurpExtender, IContextMenuFactory):
     def registerExtenderCallbacks(self, callbacks):
-        self._callbacks = callbacks
-        self._helpers = callbacks.getHelpers()
-        self.context = None
-        self.hosts = set()
+        self._callbacks = callbacks                                                                         # Burp passes an object containing API methods for interacting with Burp.
+        self._helpers = callbacks.getHelpers()                                                              # Provides utilities for parsing reqs/resps and so on. 
+        self.context = None                                                                                 # To hold the context menu invocation object.
+        self.hosts = set()                                                                                  # Creates an empty set to track unique hosts(no repeated hostnames) from the selected HTTP messages.
 
         # Start with a common password
         self.wordlist = set(["password"])
-        # Prepare our extension
-        callbacks.setExtensionName("Burp WWG")
-        callbacks.registerContextMenuFactory(self)
+        # Prepare our extension 
+        callbacks.setExtensionName("Burp WWG")                                                              # This label appears in Burp's UI.
+        callbacks.registerContextMenuFactory(self)                                                          # Registers this object as the context menu factory — this tells Burp when context menu are being built.
 
         return
     
