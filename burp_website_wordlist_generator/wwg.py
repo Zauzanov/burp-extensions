@@ -12,21 +12,31 @@ from HTMLParser import HTMLParser                                               
 
 import re                                                                                                   # Python's regular expression module for word extraction. 
 
-# 
+
+# The class inherits from HTMLParser to override its methods. 
+# To collect text and ignore markup.  
 class TagStripper(HTMLParser):
-    def __init__(self):
-        HTMLParser.__init__(self)
-        self.page_text = []
+    '''
+    Constructor: runs automatically when we create 
+    a new object(tag_stripper = TagStripper()) from the class, 
+    setting up the object's starting state.
+    '''
+    def __init__(self):                                                                                     
+        HTMLParser.__init__(self)                                                                           # Inits the internal parser state. 
+        self.page_text = []                                                                                 # A list to accumulate extracted text pieces.
     
+    # Overrides HTMLParser's the same name method
+    # to get the text stored after parsing
     def handle_data(self, data):
         self.page_text.append(data)
-    def handle_comment(self, data):
+    def handle_comment(self, data):                                                                         #  To add the words stored in developer comments to the password list.
         self.page_text.append(data)
     
     def strip(self, html):
-        self.feed(html)
-        return " ".join(self.page_text)
+        self.feed(html)                                                                                     # Parses the HTML string and triggers callbacks(handle_data/comment) which fill self.page_text.
+        return " ".join(self.page_text)                                                                     # Joins all collected chunks into 1 big string. 
     
+
 class BurpExtender(IBurpExtender, IContextMenuFactory):
     def registerExtenderCallbacks(self, callbacks):
         self._callbacks = callbacks
