@@ -74,29 +74,43 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
             host = http_service.getHost()                                                                   # Extracts the hostname from the HTTP service.
             self.hosts.add(host)                                                                            # Adds the host to the set of hosts. 
             http_response = traffic.getResponse()                                                           # Gets the raw HTTP response bytes associated with the selected message.
-            # Checks that a response exists, then calls the extraction method.
+            # Checks that a response exists, 
+            # then calls the word extraction method.
             if http_response:
                 self.get_words(http_response)
         
         self.display_wordlist()                                                                             # After all selected responses are processed, prints the final wordlist. 
         return
     
-    def get_words(self, http_response):
-        headers, body = http_response.tostring().split('\r\n\r\n', 1)
+    # Response parsing & word extraction
+    def get_words(self, http_response):                                                                     # Takes 1 HTTP response and extracts candidate words.
+        '''
+        Converts the response byte array into a string.
 
-        # Skip non-textual responses
+        Splits the raw HTTP response into headers and body. 
+        1 means split only once. 
+        '''
+        headers, body = http_response.tostring().split('\r\n\r\n', 1) 
+
+        # Skip non-textual responses:
+        # if this text doesn't exist anywhere in the headers, 
+        # stop processing this response — leave the func immediately.
         if headers.lower().find("content-type: text") == -1: 
             return
         
+        # Create a new instance of our custom HTML parser class.
+        # Fresh instance - fresh page_text list. 
         tag_stripper = TagStripper()
-        page_text = tag_stripper.strip(body)
+        page_text = tag_stripper.strip(body)                                                                # Passing the response body there, we parse the HTML, collect data/comms, return plain text. 
 
-        words = re.findall("[a-zA-Z]\w{2,}", page_text)
+        # Regular expression to extract word-like strings(3 chars minimum).
+        words = re.findall("[a-zA-Z]\w{2,}", page_text) 
 
+        # Iterates through every matched word
         for word in words:
             # filter out long strings
             if len(word) <= 12:
-                self.wordlist.add(word.lower())
+                self.wordlist.add(word.lower())                                                             # Converts to lowercase, before storing to the set. 
         
         return
     
