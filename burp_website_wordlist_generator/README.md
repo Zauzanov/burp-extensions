@@ -44,7 +44,23 @@ It will add all links found in the traffic.
 ## 5. Let's check the result, going to `Extension` — `Output`: 
 ![Output](docs/images/07%20-%20Output.png)
 
-This result can be passed to Burp Intruder, or you can save this wordlist as a file and so on. 
+This result can be passed to Burp Intruder, or you can save this wordlist as a file and check it like this:
+```bash
+cat res.txt | head -10
+```
+OUTPUT:
+```bash
+#!comment: Burp Wordlist for site(s) demo.testfire.net
+about
+about1
+about!
+about2026
+About
+About1
+About!
+About2026
+account
+```
 
 # ⚠️ ERRORS ⚠️
 ## If you're having trouble with interception, check proxy settings:
