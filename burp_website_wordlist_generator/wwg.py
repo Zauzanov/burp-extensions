@@ -128,9 +128,11 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
                 mangled.append("%s%s" % (password, suffix))
         return mangled                                                                                      # Returns the list of generated password candidates.
     
+    # Prints final results. 
     def display_wordlist(self):
         print("#!comment: Burp Wordlist for site(s) %s" % ", ".join(self.hosts))
-
+        # Generates vars for each base word,
+        # prints each variant. 
         for word in sorted(self.wordlist):
             for password in self.mangle(word):
                 print password
