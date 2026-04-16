@@ -114,15 +114,19 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         
         return
     
+    # Takes a base word and produces password variants
     def mangle(self, word):
-        year = datetime.now().year
-        suffixes = ["", "1", "!", year]
-        mangled = []
+        year = datetime.now().year                                                                          # Gets current year as an integer to make admin2026-like vars.
+        suffixes = ["", "1", "!", year]                                                                     # To append to each base word.
+        mangled = []                                                                                        # A list to hold generated vars. 
 
+        # Loops through 2 base forms: 
+        # original word and capitalized version. 
         for password in (word, word.capitalize()):
-            for suffix in suffixes:
+            for suffix in suffixes:                                                                         # appends every suffix to every base form.
+                # Builds a new string, adding each to the list.  
                 mangled.append("%s%s" % (password, suffix))
-        return mangled
+        return mangled                                                                                      # Returns the list of generated password candidates.
     
     def display_wordlist(self):
         print("#!comment: Burp Wordlist for site(s) %s" % ", ".join(self.hosts))
