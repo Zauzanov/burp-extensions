@@ -49,7 +49,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         self.wordlist = set(["password"])
         # Prepare our extension 
         callbacks.setExtensionName("Burp WWG")                                                              # This label appears in Burp's UI.
-        callbacks.registerContextMenuFactory(self)                                                          # Registers this object as the context menu factory — this tells Burp when context menu are being built.
+        callbacks.registerContextMenuFactory(self)                                                          # Registers this object as the context menu factory. This tells Burp when context menu are being built.
 
         return
     
@@ -94,7 +94,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
 
         # Skip non-textual responses:
         # if this text doesn't exist anywhere in the headers, 
-        # stop processing this response — leave the func immediately.
+        # stop processing this response, leave the func immediately.
         if headers.lower().find("content-type: text") == -1: 
             return
         
